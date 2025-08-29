@@ -1,4 +1,4 @@
-# programacion-cuatro
+# programacion cuatro
 
 ## Integrantes:
   - Luca Soresi
