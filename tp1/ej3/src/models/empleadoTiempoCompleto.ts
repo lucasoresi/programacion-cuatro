@@ -1,6 +1,9 @@
 import { Empleado } from './empleado';
 
 export class EmpleadoTiempoCompleto extends Empleado {
+    constructor(nombre:string, salarioBase:number){
+        super(nombre,salarioBase);
+    }
     private bono: number = 20000;
 
     calcularSalario(): number {
