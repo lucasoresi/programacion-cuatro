@@ -25,6 +25,7 @@ export class MockTask implements TaskCrude<number>{
         if(resultado === undefined){
             throw new Error("No se encontro la pizza");
         }
+        return resultado;
     }
     deleteTask(id: number): void {
         throw new Error("Method not implemented.");
