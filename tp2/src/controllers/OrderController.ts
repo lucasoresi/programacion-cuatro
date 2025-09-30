@@ -45,7 +45,7 @@ export class OrderController {
       res.json({
         success: true,
         data: order,
-        message: 'Order cancelled successfully'
+        message: 'Orden cancelada exitosamente'
       });
     } catch (error) {
       next(error);

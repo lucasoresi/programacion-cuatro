@@ -4,14 +4,11 @@ import { OrderController } from '../controllers/OrderController.js';
 export const orderRoutes = Router();
 const orderController = new OrderController();
 
-// POST /orders - Create new order
+// POST /orders - Crear nueva orden
 orderRoutes.post('/', orderController.createOrder.bind(orderController));
 
-// GET /orders/:id - Get order by ID
-orderRoutes.get('/:id', orderController.getOrderById.bind(orderController));
-
-// POST /orders/:id/cancel - Cancel order
-orderRoutes.post('/:id/cancel', orderController.cancelOrder.bind(orderController));
-
-// GET /orders - Get orders with optional status filter
+// GET /orders - Obtener órdenes con filtro opcional de estado
 orderRoutes.get('/', orderController.getOrders.bind(orderController));
+
+// POST /orders/:id/cancel - Cancelar orden
+orderRoutes.post('/:id/cancel', orderController.cancelOrder.bind(orderController));

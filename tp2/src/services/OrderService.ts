@@ -1,7 +1,7 @@
 import { CreateOrderRequest, Order, OrderStatusType, PizzaItem } from '../types/index.js';
 import { v4 as uuidv4 } from 'uuid';
 
-// In-memory storage (as per TP requirements)
+// Almacenamiento en memoria (según requisitos del TP)
 const orders: Map<string, Order> = new Map();
 
 export class OrderService {
@@ -29,7 +29,7 @@ export class OrderService {
   async getOrderById(id: string): Promise<Order> {
     const order = orders.get(id);
     if (!order) {
-      const error = new Error(`Order with id ${id} not found`);
+      const error = new Error(`Orden con id ${id} no encontrada`);
       error.name = 'NotFoundError';
       throw error;
     }
@@ -39,13 +39,13 @@ export class OrderService {
   async cancelOrder(id: string): Promise<Order> {
     const order = orders.get(id);
     if (!order) {
-      const error = new Error(`Order with id ${id} not found`);
+      const error = new Error(`Orden con id ${id} no encontrada`);
       error.name = 'NotFoundError';
       throw error;
     }
 
     if (order.status === 'DELIVERED') {
-      const error = new Error('Cannot cancel order that is already delivered');
+      const error = new Error('No se puede cancelar una orden que ya fue entregada');
       error.name = 'BusinessLogicError';
       throw error;
     }
@@ -67,11 +67,11 @@ export class OrderService {
     return allOrders;
   }
 
-  // Business logic for price calculation
+  // Lógica de negocio para cálculo de precio
   calculateTotalPrice(items: PizzaItem[]): number {
     return items.reduce((total, item) => {
       const sizePrice = this.getSizePrice(item.size);
-      const toppingsPrice = item.toppings.length * 2; // $2 per topping
+      const toppingsPrice = item.toppings.length * 2; // $2 por cada ingrediente
       const itemPrice = (sizePrice + toppingsPrice) * item.quantity;
       return total + itemPrice;
     }, 0);
@@ -86,12 +86,12 @@ export class OrderService {
     return prices[size as keyof typeof prices] || 0;
   }
 
-  // Helper method for testing
+  // Método auxiliar para testing
   clearOrders(): void {
     orders.clear();
   }
 
-  // Helper method for testing
+  // Método auxiliar para testing
   getAllOrders(): Order[] {
     return Array.from(orders.values());
   }
