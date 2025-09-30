@@ -10,11 +10,11 @@ export function errorHandler(
 ): void {
   console.error('Error:', error);
 
-  // Zod validation errors
+  // Errores de validación de Zod
   if (error instanceof ZodError) {
     res.status(422).json({
       success: false,
-      error: 'Validation failed',
+      error: 'Error de validación',
       details: error.errors.map(err => ({
         path: err.path.join('.'),
         message: err.message
@@ -23,9 +23,9 @@ export function errorHandler(
     return;
   }
 
-  // Custom business logic errors
+  // Errores de lógica de negocio personalizados
   if (error.name === 'BusinessLogicError') {
-    const statusCode = error.message.includes('already delivered') ? 409 : 400;
+    const statusCode = error.message.includes('entregada') ? 409 : 400;
     res.status(statusCode).json({
       success: false,
       error: error.message
@@ -33,7 +33,7 @@ export function errorHandler(
     return;
   }
 
-  // Not found errors
+  // Errores de recurso no encontrado
   if (error.name === 'NotFoundError') {
     res.status(404).json({
       success: false,
@@ -42,9 +42,9 @@ export function errorHandler(
     return;
   }
 
-  // Default server error
+  // Error del servidor por defecto
   res.status(500).json({
     success: false,
-    error: 'Internal server error'
+    error: 'Error interno del servidor'
   });
 }
