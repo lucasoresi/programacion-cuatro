@@ -11,4 +11,5 @@ export interface TaskCrude<ID>{
     editTask(id: ID, toppings: string): Task<ID>;
     editTask(id: ID, precio: number): Task<ID>;
     editTask(id: ID, pizza: string, status: string, tamanio: string, toppings: string, precio: number): Task<ID>;
+    size(): number;
 }

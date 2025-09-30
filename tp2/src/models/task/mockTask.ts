@@ -2,14 +2,29 @@ import { TaskCrude } from "./interface/taskCrude.interface";
 import { Task } from "./task";
 
 export class MockTask implements TaskCrude<number>{
+    protected tam:number;
+    protected container: Array<Task<number>>;
+    constructor(){
+        this.tam = 0;
+        this.container = new Array<Task<number>>();
+    }
+    size(): number {
+        return this.tam;
+    }
     getTasks(): Task<number> {
         throw new Error("Method not implemented.");
     }
     addTask(pizza: Task<number>): void {
-        throw new Error("Method not implemented.");
+        this.container.push(pizza);
+        this.tam++;
     }
     getTask(id: number): Task<number> {
-        throw new Error("Method not implemented.");
+            const resultado = this.container.find((pizza:Task<number>) => {
+            return pizza.getId() === id;
+        });
+        if(resultado === undefined){
+            throw new Error("No se encontro la pizza");
+        }
     }
     deleteTask(id: number): void {
         throw new Error("Method not implemented.");
