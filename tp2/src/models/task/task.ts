@@ -1,6 +1,6 @@
-export class Task<ID>{
+export class Task{
     constructor(
-        protected id: ID,
+        protected id: string,
         protected pizza: string,
         protected tamanio: string,
         protected status: string,
@@ -15,23 +15,43 @@ export class Task<ID>{
         this.precio = precio;
     }
 
+    public getsring(): string {
+        return `Id: ${this.id}, Pizza: ${this.pizza}, Tamanio: ${this.tamanio}, Status: ${this.status}, Toppings: ${this.toppings}, Precio: ${this.precio}`;
+    }
 
-    getId(): ID {
+    public getId():string {
         return this.id;
     }
-    getPizza(): string {
+    public getPizza(): string {
         return this.pizza;
     }
-    getTamanio(): string {
+    public getTamanio(): string {
         return this.tamanio;
     }
-    getStatus(): string { 
+    public getStatus(): string { 
         return this.status;
     }
-    getToppings(): string {
+    public getToppings(): string {
         return this.toppings;
     }
-    getPrecio(): number {
-        return this.precio;
+    public getPrecio(): number {
+         return this.precio;
     }
+    public setPizza(pizza: string): void {
+        this.pizza = pizza;
+    }
+    public setTamanio(tamanio: string): void { 
+        this.tamanio = tamanio;
+    }
+    public setStatus(status: string): void {   
+        this.status = status;
+    }
+    public setToppings(toppings: string): void {
+        this.toppings = toppings;
+    }
+    public setPrecio(precio: number): void {
+        this.precio = precio;
+    }
+
+
 }

@@ -1,0 +1,14 @@
+@"
+  {
+    "items": [
+      {
+        "size": "L",
+        "toppings": ["pepperoni", "queso"],
+        "quantity": 1
+      }
+    ],
+    "address": "Av. Corrientes 1234, CABA",
+    "customerName": "Test User",
+    "phone": "+54911123456"
+  }
+  "@ | Out-File -FilePath "orden.json" -Encoding UTF8

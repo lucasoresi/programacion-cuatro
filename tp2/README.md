@@ -46,7 +46,7 @@ Crear nuevo pedido de pizza.
   "items": [
     {
       "size": "M",
-      "toppings": ["pepperoni", "cheese"],
+      "toppings": ["pepperoni", "queso"],
       "quantity": 2
     }
   ],
@@ -74,7 +74,7 @@ Crear nuevo pedido de pizza.
 }
 ```
 
-### GET /orders/:id
+### GET /order/:id
 Obtener pedido por ID.
 
 **Respuesta 200:**
@@ -93,7 +93,7 @@ Cancelar pedido existente.
 {
   "success": true,
   "data": { /* orden cancelada */ },
-  "message": "Order cancelled successfully"
+  "message": "Orden cancelada exitosamente"
 }
 ```
 
@@ -125,7 +125,7 @@ curl -X POST http://localhost:3000/orders \
   }'
 
 # Obtener pedido por ID
-curl http://localhost:3000/orders/YOUR_ORDER_ID
+curl http://localhost:3000/order/YOUR_ORDER_ID
 
 # Cancelar pedido
 curl -X POST http://localhost:3000/orders/YOUR_ORDER_ID/cancel
@@ -145,6 +145,22 @@ curl http://localhost:3000/health
 - **No se puede cancelar** si status = "delivered"
 - **Address mínimo** 10 caracteres
 - **Items no puede estar vacío**
+
+## 💾 Almacenamiento
+
+**⚠️ Importante**: Este proyecto utiliza almacenamiento **en memoria** (InMemoryOrderRepository).
+
+- Los datos se **resetean** cada vez que se reinicia el servidor
+- Incluye **datos de ejemplo** predefinidos (`order-001` a `order-005`)
+- Los pedidos creados vía API solo existen durante la sesión actual
+- Para persistencia real, se debe implementar una base de datos
+
+**Datos de ejemplo disponibles:**
+- `order-001`: Pizza L con pepperoni, queso, champiñones (PENDING)
+- `order-002`: Pizza M x2 + Pizza S (PREPARING)  
+- `order-003`: Pizza S x3 con queso (READY)
+- `order-004`: Pizza L con 5 toppings (DELIVERED)
+- `order-005`: Pizza M con jamón (CANCELLED)
 
 ## ❌ Códigos de Error
 
