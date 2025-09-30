@@ -1,10 +1,15 @@
 import { CreateOrderRequest, Order, OrderStatusType, PizzaItem } from '../types/index.js';
 import { v4 as uuidv4 } from 'uuid';
-
-// Almacenamiento en memoria (según requisitos del TP)
-const orders: Map<string, Order> = new Map();
+import { OrderRepository } from '../repositories/OrderRepository.js';
+import { InMemoryOrderRepository } from '../repositories/InMemoryOrderRepository.js';
 
 export class OrderService {
+  private orderRepository: OrderRepository;
+
+  constructor(orderRepository?: OrderRepository) {
+    // Si no se inyecta un repository, usar InMemoryOrderRepository por defecto
+    this.orderRepository = orderRepository || new InMemoryOrderRepository();
+  }
   
   async createOrder(orderData: CreateOrderRequest): Promise<Order> {
     const orderId = uuidv4();
@@ -22,12 +27,11 @@ export class OrderService {
       updatedAt: new Date()
     };
 
-    orders.set(orderId, order);
-    return order;
+    return await this.orderRepository.save(order);
   }
 
   async getOrderById(id: string): Promise<Order> {
-    const order = orders.get(id);
+    const order = await this.orderRepository.findById(id);
     if (!order) {
       const error = new Error(`Orden con id ${id} no encontrada`);
       error.name = 'NotFoundError';
@@ -37,7 +41,7 @@ export class OrderService {
   }
 
   async cancelOrder(id: string): Promise<Order> {
-    const order = orders.get(id);
+    const order = await this.orderRepository.findById(id);
     if (!order) {
       const error = new Error(`Orden con id ${id} no encontrada`);
       error.name = 'NotFoundError';
@@ -53,18 +57,11 @@ export class OrderService {
     order.status = 'CANCELLED';
     order.updatedAt = new Date();
     
-    orders.set(id, order);
-    return order;
+    return await this.orderRepository.update(order);
   }
 
   async getOrders(status?: string): Promise<Order[]> {
-    const allOrders = Array.from(orders.values());
-    
-    if (status) {
-      return allOrders.filter(order => order.status.toLowerCase() === status.toLowerCase());
-    }
-    
-    return allOrders;
+    return await this.orderRepository.findAll(status);
   }
 
   // Lógica de negocio para cálculo de precio
@@ -87,12 +84,12 @@ export class OrderService {
   }
 
   // Método auxiliar para testing
-  clearOrders(): void {
-    orders.clear();
+  async clearOrders(): Promise<void> {
+    await this.orderRepository.clear();
   }
 
   // Método auxiliar para testing
-  getAllOrders(): Order[] {
-    return Array.from(orders.values());
+  async getAllOrders(): Promise<Order[]> {
+    return await this.orderRepository.findAll();
   }
 }
