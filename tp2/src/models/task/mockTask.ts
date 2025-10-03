@@ -15,8 +15,11 @@ export class MockTask implements TaskCrude{
         return this.container;
     }
     addTask(pizza: Task): void {
+        pizza.setID((this.tam + 1)+"")
         this.container.push(pizza);
         this.tam++;
+ 
+       
     }
     getTask(id: string): Task {
             const resultado = this.container.find((pizza:Task) => {
@@ -71,6 +74,17 @@ export class MockTask implements TaskCrude{
         return tareaEncontrar;
     }
     editTask(id: string, pizza: string, status: string, tamanio: string, toppings: string, precio: number): Task {
-        throw new Error("Method not implemented.");
+        const tareaEncontrar = this.container.find((tarea: Task) => tarea.getId() === id);
+        if(!tareaEncontrar){
+            throw new Error("No se encontro la pizza");
+        }
+        tareaEncontrar.setPizza(pizza);
+        tareaEncontrar.setStatus(status);
+        tareaEncontrar.setTamanio(tamanio);
+        tareaEncontrar.setToppings(toppings);
+        tareaEncontrar.setPrecio(precio);
+        return tareaEncontrar;
     }
 }
+
+export default new MockTask();

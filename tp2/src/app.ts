@@ -1,27 +1,32 @@
 import express from 'express';
 import cors from 'cors';
-import { orderRoutes } from './routes/orderRoutes.js';
-import { orderSingleRoutes } from './routes/orderSingleRoutes.js';
-import { errorHandler } from './middleware/errorHandler.js';
+import taskRoute from './routes/task.routes'
 
-export function makeApp() {
-  const app = express();
 
-  // Middleware
-  app.use(cors());
-  app.use(express.json());
+class Server{
+  public app: express.Application;
+  public port: number;
 
-  // Rutas
-  app.use('/orders', orderRoutes);
-  app.use('/order', orderSingleRoutes);
+  constructor(port:number){
+    this.port = port;
+    this.app = express()
+    this.middlewares()
+    this.routes();
+  }
+  middlewares(){
+    this.app.use(express.json({limit:'150mb'}))
 
-  // Endpoint de estado de salud
-  app.get('/health', (req, res) => {
-    res.json({ status: 'OK', timestamp: new Date().toISOString() });
-  });
+    //corse
+    this.app.use(cors())
+  }
+  routes(){
+    this.app.use("/tasks", taskRoute);
+  }
 
-  // Middleware de manejo de errores (debe ir al final)
-  app.use(errorHandler);
+  start(callbaack:()=>void){
+    this.app.listen(this.port, callbaack)
+  }
 
-  return app;
 }
+
+export default Server

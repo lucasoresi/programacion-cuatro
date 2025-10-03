@@ -1,10 +1,8 @@
-import { makeApp } from './app.js';
+import Server from "./app"
 
-const PORT = process.env.PORT || 3000;
 
-const app = makeApp();
+const server = new Server(3000)
 
-app.listen(PORT, () => {
-  console.log(`🍕 Pizzeria API running on port ${PORT}`);
-  console.log(`📊 Health check available at http://localhost:${PORT}/health`);
-});
+server.start(()=>{
+  console.log("on port 3000")
+})

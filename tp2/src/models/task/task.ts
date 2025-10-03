@@ -1,11 +1,13 @@
+
 export class Task{
     constructor(
-        protected id: string,
+        
         protected pizza: string,
         protected tamanio: string,
         protected status: string,
         protected toppings: string,
-        protected precio: number
+        protected precio: number,
+        protected id: string = ""
     ){
         this.id = id;
         this.tamanio = tamanio;
@@ -14,7 +16,7 @@ export class Task{
         this.pizza = pizza;
         this.precio = precio;
     }
-
+    
     public getsring(): string {
         return `Id: ${this.id}, Pizza: ${this.pizza}, Tamanio: ${this.tamanio}, Status: ${this.status}, Toppings: ${this.toppings}, Precio: ${this.precio}`;
     }
@@ -36,6 +38,9 @@ export class Task{
     }
     public getPrecio(): number {
          return this.precio;
+    }
+    public setID(id:string):void{
+        this.id = id
     }
     public setPizza(pizza: string): void {
         this.pizza = pizza;
