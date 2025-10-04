@@ -14,15 +14,22 @@ export class MockTask implements TaskCrude{
     getTasks(): Array<Task> {
         return this.container;
     }
+    
+
+    getTasksByStatus(status: string): Array<Task> {
+        return this.container.filter((task: Task) => 
+            task.getStatus().toLowerCase() === status.toLowerCase()
+        );
+    }
+    
     addTask(pizza: Task): void {
         pizza.setID((this.tam + 1)+"")
         this.container.push(pizza);
         this.tam++;
- 
-       
     }
+    
     getTask(id: string): Task {
-            const resultado = this.container.find((pizza:Task) => {
+        const resultado = this.container.find((pizza:Task) => {
             return pizza.getId() === id;
         });
         if(resultado === undefined){
@@ -30,8 +37,26 @@ export class MockTask implements TaskCrude{
         }
         return resultado;
     }
+    
+
+    cancelTask(id: string): Task {
+        const task = this.getTask(id);
+        
+        if (!task.canBeCancelled()) {
+            throw new Error("No se puede cancelar un pedido ya entregado");
+        }
+        
+        task.setStatus("cancelled");
+        return task;
+    }
+    
     deleteTask(id: string): void {
-        throw new Error("Method not implemented.");
+        if(!id){
+            throw new Error("no se encontro el pedido")
+        }else{
+            const index  = this.container.findIndex((pizza:Task)=>pizza.getId()===id)
+            this.container.splice(index,1)
+        }
     }
     editPizza(id: string, pizza: string): Task {
         const tareaEncontrar = this.container.find((tarea: Task) => tarea.getId() === id);

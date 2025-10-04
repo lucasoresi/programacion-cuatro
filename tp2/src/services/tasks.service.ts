@@ -6,13 +6,23 @@ class TaskServices implements TaskCrude{
     getTasks(): Array<Task> {
         return TaskModel.getTasks();
     }
+    
+    getTasksByStatus(status: string): Array<Task> {
+        return TaskModel.getTasksByStatus(status);
+    }
+    
     getTask(id: string): Task {
         return TaskModel.getTask(id);
     }
+    
     addTask(pizza: Task): void {
         TaskModel.addTask(pizza);
-        
     }
+    
+    cancelTask(id: string): Task {
+        return TaskModel.cancelTask(id);
+    }
+    
     deleteTask(id: string): void {
         TaskModel.deleteTask(id);
     }
@@ -37,7 +47,6 @@ class TaskServices implements TaskCrude{
     size(): number {
         return TaskModel.size();
     }
-    
 }
 
 export default new TaskServices();
