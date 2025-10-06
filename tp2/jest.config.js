@@ -30,11 +30,7 @@ export default {
     'src/**/*.ts',
     '!src/**/*.d.ts',
     '!src/server.ts',
-    '!src/types/**/*.ts',
-    '!src/app.ts',
-    '!src/models/task/**/*',
-    '!src/controllers/task.controller.ts',
-    '!src/services/tasks.service.ts'
+    '!src/types/**/*.ts'
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
