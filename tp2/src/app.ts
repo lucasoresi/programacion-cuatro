@@ -20,7 +20,7 @@ class Server{
     this.app.use(cors())
   }
   routes(){
-    this.app.use("/tasks", taskRoute);
+    this.app.use("/orders", taskRoute);
   }
 
   start(callbaack:()=>void){
