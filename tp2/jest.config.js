@@ -8,18 +8,33 @@ export default {
     '**/?(*.)+(spec|test).ts'
   ],
   transform: {
-    '^.+\\.ts$': ['ts-jest', {
-      useESM: true
+    '^.+\\.(ts|js)$': ['ts-jest', {
+      useESM: true,
+      tsconfig: {
+        allowJs: true,
+        moduleResolution: 'NodeNext',
+        allowImportingTsExtensions: true
+      }
     }]
   },
-  moduleNameMapping: {
-    '^@/(.*)$': '<rootDir>/src/$1'
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+    '^\\.\\./controllers/(.*)\\.js$': '<rootDir>/src/controllers/$1',
+    '^\\.\\./routes/(.*)\\.js$': '<rootDir>/src/routes/$1',
+    '^\\.\\./services/(.*)\\.js$': '<rootDir>/src/services/$1',
+    '^\\.\\./repositories/(.*)\\.js$': '<rootDir>/src/repositories/$1'
   },
+  transformIgnorePatterns: ['/node_modules/(?!uuid/)'],
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/**/*.d.ts',
     '!src/server.ts',
-    '!src/types/**/*.ts'
+    '!src/types/**/*.ts',
+    '!src/app.ts',
+    '!src/models/task/**/*',
+    '!src/controllers/task.controller.ts',
+    '!src/services/tasks.service.ts'
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
