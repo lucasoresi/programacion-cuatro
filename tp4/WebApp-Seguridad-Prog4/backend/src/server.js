@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const path = require('path');
 
 // Importar configuraciones y utilidades
@@ -15,23 +16,66 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // Especificar origen permitido
+  credentials: true // Permitir cookies
+}));
+app.use(cookieParser()); // Necesario para csurf con cookies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Servir archivos estáticos (uploads)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// Session para CSRF (vulnerable - sin token CSRF)
+// Session CORREGIDA con SameSite para protección CSRF
 app.use(session({
   secret: 'vulnerable-secret',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false }
+  cookie: {
+    secure: false, // true en producción con HTTPS
+    httpOnly: true,
+    sameSite: 'strict' // Protección CSRF
+  }
 }));
+
+// Middleware para validar Origin/Referer (Protección CSRF adicional)
+const validateOrigin = (req, res, next) => {
+  const allowedOrigins = ['http://localhost:3000', 'http://localhost:5000'];
+  const origin = req.get('origin') || req.get('referer');
+
+  // Permitir requests sin origin (como las de Postman en desarrollo o GET requests)
+  if (!origin) {
+    return next();
+  }
+
+  const isAllowed = allowedOrigins.some(allowed => origin.startsWith(allowed));
+
+  if (!isAllowed) {
+    return res.status(403).json({
+      error: 'Invalid Origin. CSRF protection activated.'
+    });
+  }
+
+  next();
+};
+
+// Aplicar validación de origin a todas las rutas de API
+app.use('/api', validateOrigin);
 
 // Usar todas las rutas con prefijo /api
 app.use('/api', routes);
+
+// Middleware de manejo de errores CSRF
+app.use((err, req, res, next) => {
+  if (err.code === 'EBADCSRFTOKEN') {
+    // Token CSRF inválido o ausente
+    return res.status(403).json({
+      error: 'Invalid CSRF token. CSRF protection activated.'
+    });
+  }
+  next(err);
+});
 
 // Middleware de manejo de errores
 app.use(notFound);
